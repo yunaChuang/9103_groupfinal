@@ -1,40 +1,50 @@
-# 🕊️ Cyber Dove – Interactive Glitch Dove with Perlin-Style Character Breaking
+# 🕊️ Cyber Dove – Glitch-Inspired Interactive Animation
 
-## 🎮 Interaction Mode: User Input – Click, Drag, and Double-Click
+## 🎮 Mode: User Input (Mouse Interaction)
 
-## 🧠 Concept
-This sketch visualizes a dove composed of dark dots, which under user interaction transforms into a cybernetic creature constructed from glowing symbolic characters (`π`, `∞`, `Σ`, etc.). Inspired by glitch aesthetics, the animation emulates destruction and return-to-form dynamics.
-
----
-
-## 🔄 Features
-
-| Interaction        | Behavior                                                                 |
-|--------------------|--------------------------------------------------------------------------|
-| Click              | Enter cyber mode                                                        |
-| Drag (in cyber)    | Break nearby points into floating characters                             |
-| Character Flicker  | Each broken character glows softly using sine flickering                 |
-| Rebound            | Broken characters slowly return to their original positions              |
-| Double-click       | Restore original dot-only dove mode                                      |
+### 🧠 Concept
+This project reimagines a peaceful dove composed of pixel dots. Through user interaction, the dove momentarily breaks into a chaotic array of glowing symbolic characters. Inspired by glitch and cyber aesthetics, the project captures the contrast between order and digital disruption.
 
 ---
 
-## ✨ Visual Style
+## ✨ Interaction Features
 
-- **Cyber Mode Background**: Dark navy blue (`rgb(10,10,20)`)
-- **Dots**: Deep gray when intact, neon greenish character when broken
-- **Characters**: π, ∞, Σ, #, *, %, & chosen randomly
-- **Flicker**: Animated alpha flicker using `sin(frameCount + offset)`
+| Action               | Behavior                                                                 |
+|----------------------|--------------------------------------------------------------------------|
+| 🖱️ Single Click       | Activates **Cyber Mode**                                                 |
+| 🖱️ Click on Dove     | **Breaks character-forming dots** into glowing symbols                   |
+| 🖱️ Drag in Cyber Mode| Continuously breaks more points along the path of the mouse              |
+| 🔁 Rebound Effect     | Broken characters **gradually float back** to their original dot position |
+| 🖱️ Double Click       | Resets everything to **original dot-based dove**                         |
 
 ---
 
-## 🧩 Technical Breakdown
+## 🎨 Visual States
 
-### Class: `CyberDot`
+### 🕊️ Default (Dot Mode)
+
+- Dove is formed entirely by **black dots** extracted from a reference image.
+- No animation, no interaction – fully **static and peaceful**.
+- Mouse input has **no effect** in this mode.
+
+### 💥 Cyber Mode (Interactive Glitch)
+
+- Background turns dark (deep blue).
+- **Clicking or dragging on dove** disrupts its structure:
+  - Dots become characters like `π`, `∞`, `Σ`, `*`, `#`, etc.
+  - Each character flickers softly in green tones.
+  - Broken regions slowly revert back to dot form with elastic movement.
+
+---
+
+## 🧩 Technical Overview
+
+### Dot State Handling
 
 ```js
-if (this.broken) {
-  let flicker = map(sin(frameCount * 0.1 + this.brightnessOffset), -1, 1, 100, 180);
-  fill(128, 255, 128, flicker);
-  text(this.char, this.pos.x, this.pos.y);
+if (isCyber) {
+  if (d < 60 && mouseIsPressed) {
+    this.broken = true;
+    this.vel.add(p5.Vector.random2D().mult(random(2, 5)));
+  }
 }
