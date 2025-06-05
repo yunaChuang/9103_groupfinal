@@ -9,11 +9,17 @@ let speedSound;
 let speedPlayed = false;
 let musicButton;
 let analyser;
+let fft;
+let numBins = 512;
+let smoothing = 0.8;
+let explosionStrength = 1;
+let state = "waiting"; 
+let stateTimer = 0;
 
 function preload() {
   doveImg = loadImage("assets/dovefinal.png");
-  song = loadSound("assets/alien.wav");
-  speedSound = loadSound("assets/piano-loops-093-effect-120-bpm.wav");
+  speedSound = loadSound("assets/alien.wav");
+  song = loadSound("assets/piano-loops-093-effect-120-bpm.wav");
 }
 
 function setup() {
@@ -27,8 +33,8 @@ function setup() {
   let xOffset = (width - doveImg.width) / 2;
   let yOffset = (height - doveImg.height) / 2;
 
-  for (let y = 0; y < doveImg.height; y += 3) {
-    for (let x = 0; x < doveImg.width; x += 3) {
+  for (let y = 0; y < doveImg.height; y += 5) {
+    for (let x = 0; x < doveImg.width; x += 5) {
       let idx = (x + y * doveImg.width) * 4;
       let r = doveImg.pixels[idx];
       let g = doveImg.pixels[idx + 1];
@@ -41,54 +47,89 @@ function setup() {
     }
   }
 
-  song.loop();
-
   analyser = new p5.Amplitude();
   analyser.setInput(song);
 
-  musicButton = createButton("Pause Music");
-  musicButton.position(20, 20);
-  musicButton.mousePressed(toggleMusic);
+  fft = new p5.FFT(smoothing, numBins);
+  speedSound.connect(fft);
 
+  musicButton = createButton("Play");
+  musicButton.style('background', 'transparent');
+  musicButton.style('color', 'black'); 
+  musicButton.style('border', 'green'); 
+  musicButton.style('font-size', '14px');
+  musicButton.mousePressed(toggleMusic);
   noStroke();
 }
 
 function draw() {
+  updateState();
+  let t = millis() * 0.001;
+
   if (isCyber) {
-    background(10, 10, 20);
+    background(0);
     for (let d of cyberDots) {
       d.update();
       d.display();
     }
     fill(180);
     textSize(14);
-    text("Drag or click on the dove to disrupt it. Double-click to reset.", width / 2, height - 20);
+    text("Double-click to reset to normal mode.", width / 2, height - 20);
   } else {
     background(255);
     for (let d of dots) {
-      d.update(createVector(mouseX, mouseY), getExplosionStrength());
+      d.update(t);
       d.display();
     }
-    if (clickFlash > 0) {
-      fill(0, 0, 0, clickFlash);
-      rect(0, 0, width, height);
-      clickFlash -= 8;
-    }
-    fill(0);
-    textSize(14);
-    text("Click to enter cyber mode. Click once to trigger speed sound.", width / 2, height - 20);
   }
 
-  // Draw ellipse based on audio amplitude
-  let level = analyser.getLevel(); // 0.0 to 1.0
-  let ellipseSize = map(level, 0, 0.4, 100, 150); // tweak as needed
-  fill(255, 200, 0, 180);
-  noStroke();
-  ellipse(100, 100, ellipseSize);
+  let level = analyser.getLevel();
+  let ellipseSize = map(level, 0, 0.4, 120, 200);
+  let ellipseX = (width - 1000) / 2 + ellipseSize;
+  let ellipseY = (height - 650) / 2 + ellipseSize;
+  fill(255, 70, 70, 220);
+  ellipse(ellipseX, ellipseY, ellipseSize);
+  musicButton.position(ellipseX - musicButton.width / 2, ellipseY - musicButton.height / 2);
+
+  let spectrum = fft.analyze();
+  let barHeight = (height - ellipseY) / spectrum.length;
+  for (let i = 0; i < spectrum.length; i++) {
+    let r = map(i, 0, spectrum.length, 240, 70);
+    let g = map(i, 0, spectrum.length, 70, 240);
+    fill(r, g, 0, 220);
+    let x = map(spectrum[i], 0, 255, 0, width / 3);
+    let y = ellipseY / 2 + i * barHeight;
+    rect(0, y, x, barHeight);
+  }
+
+  fill(0);
+  textSize(14);
+  if (!isCyber) {
+    text("Click to enter cyber mode. Double-click to reset.", width / 2, height - 20);
+  }
 }
 
-function getExplosionStrength() {
-  return map(sin(frameCount * 0.02), -1, 1, 1, 5);
+function updateState() {
+  stateTimer++;
+
+  if (state === "expanding") {
+    explosionStrength += 0.08;
+    if (explosionStrength >= 5) {
+      explosionStrength = 5;
+      state = "contracting";
+    }
+  } else if (state === "contracting") {
+    explosionStrength -= 0.12;
+    if (explosionStrength <= 1) {
+      explosionStrength = 1;
+      state = "waiting";
+      stateTimer = 0;
+    }
+  } else if (state === "waiting") {
+    if (stateTimer > 60) {
+      state = "expanding";
+    }
+  }
 }
 
 function mousePressed() {
@@ -109,7 +150,7 @@ function mousePressed() {
   if (isCyber) {
     for (let d of cyberDots) {
       let distToMouse = dist(mouseX, mouseY, d.pos.x, d.pos.y);
-      if (distToMouse < 60) {
+      if (distToMouse < 200) {
         d.broken = true;
         let angle = random(TWO_PI);
         let mag = random(1.5, 2.5);
@@ -124,28 +165,13 @@ function mousePressed() {
   }
 }
 
-function mouseDragged() {
-  if (isCyber) {
-    for (let d of cyberDots) {
-      let randOffset = random(0.5, 1.5);
-      let distToMouse = dist(mouseX + random(-30, 30), mouseY + random(-30, 30), d.pos.x, d.pos.y);
-      if (distToMouse < 40 * randOffset) {
-        d.broken = true;
-        let angle = random(TWO_PI);
-        let mag = random(0.5, 1.5);
-        d.vel.add(p5.Vector.fromAngle(angle).mult(mag));
-      }
-    }
-  }
-}
-
 function toggleMusic() {
   if (song.isPlaying()) {
     song.pause();
-    musicButton.html("Play Music");
+    musicButton.html("Play");
   } else {
     song.loop();
-    musicButton.html("Pause Music");
+    musicButton.html("Pause");
   }
 }
 
@@ -153,40 +179,38 @@ class Dot {
   constructor(x, y) {
     this.origin = createVector(x, y);
     this.pos = this.origin.copy();
-    this.vel = p5.Vector.random2D().mult(random(3));
+    this.seed = random(1000);
   }
 
-  update(mouseVec, explosionStrength) {
-    let dir = p5.Vector.sub(this.pos, mouseVec);
-    let d = dir.mag();
+update(time) {
+  let noiseVal = noise(this.origin.x * 0.002, this.origin.y * 0.002, time * 0.5 + this.seed);
+  let angle = noiseVal * TWO_PI * 2;
+  let radius = 5;
+  this.pos.x = this.origin.x + cos(angle) * radius;
+  this.pos.y = this.origin.y + sin(angle) * radius;
 
-    if (d < 80 && mouseIsPressed) {
-      dir.setMag(1.2);
-      this.vel.add(dir);
-    }
+  // Time-based expansion effect
+  let explosion = p5.Vector.sub(this.pos, this.origin);
+  explosion.normalize().mult(explosionStrength);
+  this.pos.add(explosion);
 
-    let explosion = p5.Vector.sub(this.pos, this.origin);
-    explosion.normalize().mult(explosionStrength);
-    this.vel.add(explosion);
+  // Gentle return to origin
+  let pullBack = p5.Vector.sub(this.origin, this.pos).mult(0.02);
+  this.pos.add(pullBack);
 
-    let attraction = p5.Vector.sub(this.origin, this.pos);
-    attraction.mult(0.05);
-    this.vel.add(attraction);
-
-    if (explosionStrength < 2) {
-      this.pos.add(p5.Vector.random2D().mult(0.3));
-    }
-
-    this.vel.limit(5);
-    this.vel.mult(0.9);
-    this.pos.add(this.vel);
+  // Optional: slight jitter if paused
+  if (state === "waiting") {
+    this.pos.add(p5.Vector.random2D().mult(0.2));
   }
+}
 
   display() {
-    let t = frameCount * 0.02 + this.pos.y * 0.005;
-    let gray = 125 + 75 * sin(t);
-    fill(gray);
-    ellipse(this.pos.x, this.pos.y, 2.8, 2.8);
+    let gradientRatio = constrain(this.pos.y / height, 0, 1);
+    let r = lerp(59, 168, gradientRatio);
+    let g = lerp(130, 85, gradientRatio);
+    let b = lerp(246, 247, gradientRatio);
+    fill(r, g, b);
+    ellipse(this.pos.x, this.pos.y, 2.2, 2.2);
   }
 }
 
@@ -196,12 +220,12 @@ class CyberDot {
     this.pos = this.origin.copy();
     this.vel = createVector(0, 0);
     this.broken = false;
-    this.char = random(["π", "∞", "Σ", "#", "*", "%", "&"]);
-    this.brightnessOffset = random(1000);
+    this.char = random(["π", "∞", "Σ", "%", "&"]);
+    this.brightnessOffset = random(100);
   }
 
   update() {
-    this.vel.mult(0.88);
+    this.vel.mult(0.8);
     this.pos.add(this.vel);
     let back = p5.Vector.sub(this.origin, this.pos).mult(0.07);
     this.pos.add(back);
@@ -211,12 +235,10 @@ class CyberDot {
     if (this.broken && isCyber) {
       let flicker = map(sin(frameCount * 0.1 + this.brightnessOffset), -1, 1, 100, 180);
       fill(128, 255, 128, flicker);
-      noStroke();
       textSize(11);
       text(this.char, this.pos.x, this.pos.y);
     } else if (isCyber) {
-      fill(40);
-      noStroke();
+      fill(0);
       ellipse(this.pos.x, this.pos.y, 2.8);
     }
   }
