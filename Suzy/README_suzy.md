@@ -1,43 +1,47 @@
-# 🕊️ Peace Dove Interaction (Image Edition)
+# 🕊️ Cyber Dove – Neon Green Symbolic Animation (User Input Version)
 
-## 🎮 Animation Type: User Input (Mouse Movement + Click)
+## 🔧 Interaction Type: User Input
 
-This project uses **an image of a dove** (`dovefinal.png`) placed at the center of the canvas.  
-User interaction makes the experience engaging and visually dynamic.
-
----
-
-## 🖱️ Controls
-
-- **Move Mouse**: A green olive branch follows the cursor
-- **Click Mouse**: Background color changes randomly
+This individual animation reimagines our group’s dove artwork as a **cyber-symbolic neon creature**, constructed entirely of glowing green symbols and driven by expressive mouse-based interactions.
 
 ---
 
-## 🧠 My Individual Approach
+## 🌟 What’s Unique in My Version
 
-I used **user input** as my animation method, with two interactive elements:
-1. Olive branch follows the mouse
-2. Background color reacts to clicks
+### ✅ 1. **Neon Green Glow Aesthetic**
+- All particles are not dots but characters: `π`, `∞`, `Σ`, `@`, `#`, etc.
+- Characters **flicker gently**, producing a pulsing “breathing” light effect.
+- Color is set to **glowing green** (`#00FF00`) for a sci-fi hacker feel.
 
-This direct interaction invites users to move and play with the peaceful image in subtle ways.
+### ✅ 2. **Mouse-Click Ripple + Explosion**
+- On click:
+  - A **ripple expands** from the click point in green light.
+  - Characters **scatter outward** with random force.
+  - Particles **return to position quickly**, creating a sense of elastic tension.
+
+### ✅ 3. **Horizontal Sway with Mouse**
+- As mouse moves left/right, the entire dove matrix sways horizontally.
+- This motion gives a floating, airy sensation—like data hovering in a void.
 
 ---
 
-## 🎨 Media Used
+## 🎨 Visual Style Summary
 
-- Dove artwork file: `assets/dovefinal.png`
-- Canvas and animation logic built using `p5.js`
-- Image is displayed using `imageMode(CENTER)` and `image()` function
+| Element             | Style Description                                      |
+|---------------------|--------------------------------------------------------|
+| **Background**      | Deep black-blue                                        |
+| **Particles**       | Random cyber-symbols, neon green glow                  |
+| **Ripple Effect**   | Green circles, smooth expanding rings                  |
+| **Animation Speed** | Faster rebound after click, subtle flicker at rest     |
+| **Aesthetic**       | Matrix x Zen x Minimal Hacker                          |
 
 ---
 
-## 🔧 Technical Summary
+## 📐 Technical Highlights
+
+### Character Particles
 
 ```js
-function preload() {
-  doveImage = loadImage('assets/dovefinal.png');
-}
-function draw() {
-  image(doveImage, width / 2, height / 2, 200, 150);
-}
+stroke(0, 255, 0, alpha * 0.4); // Neon green stroke
+fill(0, 255, 0, alpha);         // Glowing green fill
+restoring.mult(0.08);           // Fast elastic return
