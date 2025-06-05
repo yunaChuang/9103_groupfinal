@@ -134,20 +134,42 @@ function updateState() {
 
 function mousePressed() {
   let now = millis();
+
   if (now - lastClick < 300) {
+    // === DOUBLE CLICK ===
+
+    // Exit cyber mode
     isCyber = false;
+
+    // Reset cyber dots
     for (let d of cyberDots) {
       d.broken = false;
       d.vel.mult(0);
       d.pos = d.origin.copy();
     }
+
+    // Reset background sound
+    song.stop();
+    musicButton.html("Play");
+    speedPlayed = false;
+
+    // Stop speed sound
+    if (speedSound.isPlaying()) {
+      speedSound.stop();
+    }
+
+    // Optional: reset explosion animation
+    explosionStrength = 1;
+    state = "waiting";
+    stateTimer = 0;
+
   } else {
+    // === SINGLE CLICK ===
+
     isCyber = true;
     clickFlash = 100;
-  }
-  lastClick = now;
 
-  if (isCyber) {
+    // Trigger nearby cyber dots
     for (let d of cyberDots) {
       let distToMouse = dist(mouseX, mouseY, d.pos.x, d.pos.y);
       if (distToMouse < 200) {
@@ -157,12 +179,15 @@ function mousePressed() {
         d.vel.add(p5.Vector.fromAngle(angle).mult(mag));
       }
     }
+
+    // Play speed sound once if not yet played
+    if (!speedPlayed) {
+      speedSound.play();
+      speedPlayed = true;
+    }
   }
 
-  if (!speedPlayed) {
-    speedSound.play();
-    speedPlayed = true;
-  }
+  lastClick = now;
 }
 
 function toggleMusic() {
