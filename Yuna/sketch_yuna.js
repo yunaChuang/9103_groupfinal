@@ -7,8 +7,6 @@ let fft;
 let numBins = 256;
 let smoothSound = 0.8;
 let speedPlayed = false;
-let sunX ;
-let sunY;
 
 function preload() {
   doveImg = loadImage("assets/dovefinal.png");
@@ -60,7 +58,7 @@ function draw() {
     dot.display();
   }
 
-  // Instruction
+  // Instruction text
   fill(100);
   textSize(14);
   text("Click once to trigger speed sound.", 20, height - 20);
@@ -69,13 +67,13 @@ function draw() {
   let amplitude = fft.getEnergy(20, 20000);
   let spectrum = fft.analyze();
 
-  // Layout config
   let minDimension = min(width, height);
   let circleRadius = minDimension / 5;
   let maxRectLength = (minDimension * 2) / 5;
 
-  // Translate for spectrum
-  translate(0, 0);
+  // Move origin to center for circular spectrum
+  push();
+  translate(width / 2, height / 2);
 
   for (let i = 0; i < spectrum.length; i++) {
     let angle = map(i, 0, spectrum.length, 0, TWO_PI);
@@ -88,10 +86,12 @@ function draw() {
     pop();
   }
 
-  // Inner circle
+  // Central yellow ellipse pulsing with amplitude
   let innerCircleSize = map(amplitude, 0, 255, circleRadius / 5, circleRadius);
   fill(255, 200, 0);
   ellipse(0, 0, innerCircleSize * 3);
+
+  pop(); // restore origin
 }
 
 function mousePressed() {
