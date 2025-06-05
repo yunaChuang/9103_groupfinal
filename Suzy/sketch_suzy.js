@@ -1,4 +1,4 @@
-// === Cyber Dove with Drag-to-Distort + Double-click Reset ===
+// === Cyber Dove – Free-Form Drag Distortion & Isolated Modes ===
 let doveImg;
 let cyberDots = [];
 let isCyber = false;
@@ -43,7 +43,7 @@ function draw() {
     }
     fill(180);
     textSize(14);
-    text("Drag mouse to distort dove into glowing code. Double-click to reset.", width / 2, height - 20);
+    text("Drag to distort the dove into code. Double-click to reset.", width / 2, height - 20);
   } else {
     background(255);
     fill(0);
@@ -72,11 +72,14 @@ function mousePressed() {
 function mouseDragged() {
   if (isCyber) {
     for (let d of cyberDots) {
-      let dToMouse = dist(mouseX, mouseY, d.pos.x, d.pos.y);
-      if (dToMouse < 80) {
+      // Freeform distortion: fluid randomness, no geometric constraint
+      let randOffset = random(0.5, 1.5);
+      let distToMouse = dist(mouseX + random(-30, 30), mouseY + random(-30, 30), d.pos.x, d.pos.y);
+      if (distToMouse < 40 * randOffset) {
         d.broken = true;
-        let force = p5.Vector.sub(d.pos, createVector(mouseX, mouseY)).mult(0.2);
-        d.vel.add(force);
+        let angle = random(TWO_PI);
+        let mag = random(0.5, 1.5);
+        d.vel.add(p5.Vector.fromAngle(angle).mult(mag));
       }
     }
   }
