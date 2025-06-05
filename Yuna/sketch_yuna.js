@@ -1,112 +1,123 @@
 let doveImg;
 let dots = [];
 let song;
+let speedSound;
 let analyser;
+let fft;
+let numBins = 256;
+let smoothSound = 0.8;
+let speedPlayed = false;
+let sunX ;
+let sunY;
 
 function preload() {
-  // Load the dove image and background music
   doveImg = loadImage("assets/dovefinal.png");
-  song = loadSound('assets/piano-loops-093-effect-120-bpm.wav');
+  song = loadSound("assets/piano-loops-093-effect-120-bpm.wav");
+  speedSound = loadSound("assets/alien.wav");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  pixelDensity(1); // Use 1 display pixel per canvas pixel for accuracy
+  pixelDensity(1);
 
-  // Resize image to width = 600px, height is auto-calculated
-  doveImg.resize(600, 0);
+  doveImg.resize(1000, 0);
   doveImg.loadPixels();
 
-  // Centering the image on the canvas
   let xOffset = (width - doveImg.width) / 2;
   let yOffset = (height - doveImg.height) / 2;
 
-  // Loop through the image pixels and place a dot where it's dark
   for (let y = 0; y < doveImg.height; y += 3) {
     for (let x = 0; x < doveImg.width; x += 3) {
       let index = (x + y * doveImg.width) * 4;
       let r = doveImg.pixels[index];
       let g = doveImg.pixels[index + 1];
       let b = doveImg.pixels[index + 2];
-
       let brightness = (r + g + b) / 3;
+
       if (brightness < 50) {
-        dots.push(new Dot(x + xOffset, y + yOffset)); // place dot with offset to center it
+        dots.push(new Dot(x + xOffset, y + yOffset));
       }
     }
   }
 
-  // Set up sound analyzer for RMS (volume) reading
   analyser = new p5.Amplitude();
   analyser.setInput(song);
 
-  // Create a play/pause button for the background sound
-  let button = createButton('Sound');
-  button.position((width - button.width) / 2, height - 40);
-  button.mousePressed(playPause);
+  fft = new p5.FFT(smoothSound, numBins);
+  song.connect(fft);
+  song.loop();
 
   noStroke();
-  fill(0);
 }
 
 function draw() {
-  background(255); // white background
-  let mouse = createVector(mouseX, mouseY); // get current mouse position as a vector
+  background(255);
 
-  // Update and display all the dots (particles)
+  // Draw dove dots
+  fill(0);
   for (let dot of dots) {
-    dot.update(mouse);
+    dot.update(0);
     dot.display();
   }
 
-  // Instructional text
+  // Instruction
   fill(100);
   textSize(14);
-  text("Drag the mouse to animate the dove lines!", 20, height - 20);
+  text("Click once to trigger speed sound.", 20, height - 20);
 
-  // Visualize sound: draw a circle whose size changes with volume
-  let rms = analyser.getLevel(); // root mean square loudness
-  fill(200);
-  ellipse(width * 2/5, height * 3/5, 10 + rms * 200, 10 + rms * 200);
-}
+  // Audio analysis
+  let amplitude = fft.getEnergy(20, 20000);
+  let spectrum = fft.analyze();
 
-// Dot class: defines each moving point on the dove image
-class Dot {
-  constructor(x, y) {
-    this.origin = createVector(x, y); // original position
-    this.pos = this.origin.copy();    // current position
-    this.vel = createVector(0, 0);    // current velocity
+  // Layout config
+  let minDimension = min(width, height);
+  let circleRadius = minDimension / 5;
+  let maxRectLength = (minDimension * 2) / 5;
+
+  // Translate for spectrum
+  translate(0, 0);
+
+  for (let i = 0; i < spectrum.length; i++) {
+    let angle = map(i, 0, spectrum.length, 0, TWO_PI);
+    let rectHeight = map(spectrum[i], 0, 255, 0, maxRectLength);
+
+    push();
+    rotate(angle);
+    fill(map(i, 0, spectrum.length, 0, 255), 200, 0);
+    rect(0, circleRadius, width / spectrum.length, rectHeight);
+    pop();
   }
 
-  update(mouseVec) {
-    let dir = p5.Vector.sub(this.pos, mouseVec); // direction from mouse to dot
-    let d = dir.mag(); // distance
+  // Inner circle
+  let innerCircleSize = map(amplitude, 0, 255, circleRadius / 5, circleRadius);
+  fill(255, 200, 0);
+  ellipse(0, 0, innerCircleSize * 3);
+}
 
-    // If close to mouse and mouse is pressed, push it away
-    if (d < 80 && mouseIsPressed) {
-      dir.setMag(1.2);     // control push strength
-      this.vel.add(dir);   // apply the push
-    }
+function mousePressed() {
+  if (!speedPlayed) {
+    speedSound.play();
+    speedPlayed = true;
+  }
+}
 
-    this.vel.mult(0.9);     // apply friction
-    this.pos.add(this.vel); // update position
+class Dot {
+  constructor(x, y) {
+    this.base = createVector(x, y);
+    this.pos = this.base.copy();
+    this.vel = createVector(0, 0);
+  }
 
-    // Slowly return to original position
-    let back = p5.Vector.sub(this.origin, this.pos);
-    back.mult(0.03);
-    this.pos.add(back);
+  update(globalOffsetX) {
+    this.vel.mult(0.9);
+    this.pos.add(this.vel);
+
+    let target = createVector(this.base.x + globalOffsetX, this.base.y);
+    let restoringForce = p5.Vector.sub(target, this.pos).mult(0.04);
+    this.pos.add(restoringForce);
   }
 
   display() {
-    ellipse(this.pos.x, this.pos.y, 2.8, 2.8); // draw the dot
-  }
-}
-
-// Button control for playing/pausing the song
-function playPause() {
-  if (song.isPlaying()) {
-    song.stop();
-  } else {
-    song.loop(); // loop background music
+    ellipse(this.pos.x, this.pos.y, 2.8, 2.8);
   }
 }
