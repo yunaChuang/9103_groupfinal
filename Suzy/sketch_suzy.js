@@ -47,7 +47,7 @@ function draw() {
     }
     fill(100);
     textSize(14);
-    text("Drag to interact | Click to enter CYBER mode", 20, height - 20);
+    text("Drag to interact | Click to enter CYBER mode", 2, height - 20);
   } else {
     background(10, 10, 20);
     let dx = map(mouseX, 0, width, -40, 40);
@@ -67,29 +67,35 @@ function draw() {
 
     fill(80, 255, 80);
     textSize(14);
-    text("Click = ripple + explosion | Mouse X = sway", width / 2, height - 20);
+    text("Click = ripple + explosion", width / 2, height - 20);
   }
 }
 
 function mousePressed() {
-  if (!isCyber) {
-    isCyber = true;
-    for (let c of cyberChars) {
-      let angle = random(TWO_PI);
-      let force = p5.Vector.fromAngle(angle).mult(random(3, 5));
-      c.vel.add(force);
+    // 记录点击时间
+    let now = millis();
+    if (this.lastClick && now - this.lastClick < 300) {
+      // 双击：恢复原始模式
+      isCyber = false;
+      this.lastClick = 0;
+      return;
     }
-    ripples.push(new Ripple(mouseX, mouseY));
-  } else {
-    for (let c of cyberChars) {
-      let angle = random(TWO_PI);
-      let force = p5.Vector.fromAngle(angle).mult(random(3, 5));
-      c.vel.add(force);
+    this.lastClick = now;
+  
+    if (!isCyber) {
+      isCyber = true;
     }
-    ripples.push(new Ripple(mouseX, mouseY));
+  
+    // 无论当前状态，都在赛博模式下触发爆炸 + ripple
+    if (isCyber) {
+      for (let c of cyberChars) {
+        let angle = random(TWO_PI);
+        let force = p5.Vector.fromAngle(angle).mult(random(3, 5));
+        c.vel.add(force);
+      }
+    }
   }
-}
-
+  
 // ------- Dot class (original) -------
 class Dot {
   constructor(x, y) {
@@ -113,9 +119,11 @@ class Dot {
   }
 
   display() {
-    fill(0);
+    fill(0);  // 确保原始状态下为黑色
+    noStroke();
     ellipse(this.pos.x, this.pos.y, 2.8, 2.8);
   }
+  
 }
 
 // ------- CyberChar class -------
@@ -146,28 +154,3 @@ class CyberChar {
   }
 }
 
-// ------- Ripple class -------
-class Ripple {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.radius = 0;
-    this.opacity = 180;
-  }
-
-  update() {
-    this.radius += 6;
-    this.opacity -= 4;
-  }
-
-  display() {
-    noFill();
-    stroke(0, 255, 0, this.opacity);
-    strokeWeight(1.8);
-    ellipse(this.x, this.y, this.radius * 2);
-  }
-
-  isFinished() {
-    return this.opacity <= 0;
-  }
-}
