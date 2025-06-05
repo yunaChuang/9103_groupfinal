@@ -1,47 +1,50 @@
-# 🕊️ Cyber Dove – Neon Green Symbolic Animation (User Input Version)
+# 🕊️ Cyber Dove – Glitch-Inspired Interactive Animation
 
-## 🔧 Interaction Type: User Input
+## 🎮 Mode: User Input (Mouse Interaction)
 
-This individual animation reimagines our group’s dove artwork as a **cyber-symbolic neon creature**, constructed entirely of glowing green symbols and driven by expressive mouse-based interactions.
-
----
-
-## 🌟 What’s Unique in My Version
-
-### ✅ 1. **Neon Green Glow Aesthetic**
-- All particles are not dots but characters: `π`, `∞`, `Σ`, `@`, `#`, etc.
-- Characters **flicker gently**, producing a pulsing “breathing” light effect.
-- Color is set to **glowing green** (`#00FF00`) for a sci-fi hacker feel.
-
-### ✅ 2. **Mouse-Click Ripple + Explosion**
-- On click:
-  - A **ripple expands** from the click point in green light.
-  - Characters **scatter outward** with random force.
-  - Particles **return to position quickly**, creating a sense of elastic tension.
-
-### ✅ 3. **Horizontal Sway with Mouse**
-- As mouse moves left/right, the entire dove matrix sways horizontally.
-- This motion gives a floating, airy sensation—like data hovering in a void.
+### 🧠 Concept
+This project reimagines a peaceful dove composed of pixel dots. Through user interaction, the dove momentarily breaks into a chaotic array of glowing symbolic characters. Inspired by glitch and cyber aesthetics, the project captures the contrast between order and digital disruption.
 
 ---
 
-## 🎨 Visual Style Summary
+## ✨ Interaction Features
 
-| Element             | Style Description                                      |
-|---------------------|--------------------------------------------------------|
-| **Background**      | Deep black-blue                                        |
-| **Particles**       | Random cyber-symbols, neon green glow                  |
-| **Ripple Effect**   | Green circles, smooth expanding rings                  |
-| **Animation Speed** | Faster rebound after click, subtle flicker at rest     |
-| **Aesthetic**       | Matrix x Zen x Minimal Hacker                          |
+| Action               | Behavior                                                                 |
+|----------------------|--------------------------------------------------------------------------|
+| 🖱️ Single Click       | Activates **Cyber Mode**                                                 |
+| 🖱️ Click on Dove     | **Breaks character-forming dots** into glowing symbols                   |
+| 🖱️ Drag in Cyber Mode| Continuously breaks more points along the path of the mouse              |
+| 🔁 Rebound Effect     | Broken characters **gradually float back** to their original dot position |
+| 🖱️ Double Click       | Resets everything to **original dot-based dove**                         |
 
 ---
 
-## 📐 Technical Highlights
+## 🎨 Visual States
 
-### Character Particles
+### 🕊️ Default (Dot Mode)
+
+- Dove is formed entirely by **black dots** extracted from a reference image.
+- No animation, no interaction – fully **static and peaceful**.
+- Mouse input has **no effect** in this mode.
+
+### 💥 Cyber Mode (Interactive Glitch)
+
+- Background turns dark (deep blue).
+- **Clicking or dragging on dove** disrupts its structure:
+  - Dots become characters like `π`, `∞`, `Σ`, `*`, `#`, etc.
+  - Each character flickers softly in green tones.
+  - Broken regions slowly revert back to dot form with elastic movement.
+
+---
+
+## 🧩 Technical Overview
+
+### Dot State Handling
 
 ```js
-stroke(0, 255, 0, alpha * 0.4); // Neon green stroke
-fill(0, 255, 0, alpha);         // Glowing green fill
-restoring.mult(0.08);           // Fast elastic return
+if (isCyber) {
+  if (d < 60 && mouseIsPressed) {
+    this.broken = true;
+    this.vel.add(p5.Vector.random2D().mult(random(2, 5)));
+  }
+}
