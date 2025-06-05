@@ -1,51 +1,40 @@
-# 🕊️ Dual-Form Cyber Dove – Interactive Transformation (Click & Double Click)
+# 🕊️ Cyber Dove – Interactive Glitch Dove with Perlin-Style Character Breaking
 
-## 🧪 Interaction Type: User Input (Click + Double Click + Mouse Move)
+## 🎮 Interaction Mode: User Input – Click, Drag, and Double-Click
 
-This p5.js project presents a **two-state interactive dove animation** that toggles between a peaceful, minimalist bird and a vibrant cyberpunk character matrix. The user controls the transformation through **click and double-click gestures**.
-
----
-
-## 🔄 Two Modes of the Dove
-
-### 🔹 1. Original Mode (Default)
-- **Visual**: White background, dove made of solid black dots.
-- **Interaction**: Mouse **drag** causes elastic distortion around the pointer.
-- **Mood**: Calm, restrained, traditional.
-
-### 🔹 2. Cyber Mode (On Click)
-- **Visual**: Dark background, dove constructed with glowing **green Greek and symbolic characters** (`π`, `∞`, `Σ`, etc.).
-- **Interaction**:
-  - **Click** triggers ripple + character explosion.
-  - Dove **sways** in response to mouse X-axis movement.
-- **Mood**: Futuristic, energetic, electrified.
+## 🧠 Concept
+This sketch visualizes a dove composed of dark dots, which under user interaction transforms into a cybernetic creature constructed from glowing symbolic characters (`π`, `∞`, `Σ`, etc.). Inspired by glitch aesthetics, the animation emulates destruction and return-to-form dynamics.
 
 ---
 
-## 🎮 Interaction Summary
+## 🔄 Features
 
-| Gesture               | Effect                                                        |
-|------------------------|---------------------------------------------------------------|
-| **Click**              | Transforms into **Cyber Mode**                                |
-| **Click (in Cyber)**   | Triggers ripple + character scatter animation                 |
-| **Double Click**       | Switches **back to Original Mode**                            |
-| **Mouse Drag**         | (Only in Original Mode) Repels nearby dots with elastic force |
-| **Mouse Move (Cyber)** | Horizontal cursor moves entire dove structure                |
+| Interaction        | Behavior                                                                 |
+|--------------------|--------------------------------------------------------------------------|
+| Click              | Enter cyber mode                                                        |
+| Drag (in cyber)    | Break nearby points into floating characters                             |
+| Character Flicker  | Each broken character glows softly using sine flickering                 |
+| Rebound            | Broken characters slowly return to their original positions              |
+| Double-click       | Restore original dot-only dove mode                                      |
 
 ---
 
-## 🧠 Unique Technical Features
+## ✨ Visual Style
 
-### Mode Switching Logic
+- **Cyber Mode Background**: Dark navy blue (`rgb(10,10,20)`)
+- **Dots**: Deep gray when intact, neon greenish character when broken
+- **Characters**: π, ∞, Σ, #, *, %, & chosen randomly
+- **Flicker**: Animated alpha flicker using `sin(frameCount + offset)`
+
+---
+
+## 🧩 Technical Breakdown
+
+### Class: `CyberDot`
 
 ```js
-function mousePressed() {
-  let now = millis();
-  if (this.lastClick && now - this.lastClick < 300) {
-    isCyber = false; // Double-click restores original
-    this.lastClick = 0;
-    return;
-  }
-  this.lastClick = now;
-  isCyber = true;    // Single click triggers cyber mode
+if (this.broken) {
+  let flicker = map(sin(frameCount * 0.1 + this.brightnessOffset), -1, 1, 100, 180);
+  fill(128, 255, 128, flicker);
+  text(this.char, this.pos.x, this.pos.y);
 }
