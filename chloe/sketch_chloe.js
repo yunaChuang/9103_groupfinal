@@ -1,6 +1,10 @@
 let doveImg;
 let dots = [];
 
+let state = "expanding";
+let stateTimer = 0;
+let explosionStrength = 0;
+
 function preload() {
   doveImg = loadImage("assets/dovefinal.png");
 }
@@ -21,10 +25,12 @@ function setup() {
       let r = doveImg.pixels[index];
       let g = doveImg.pixels[index + 1];
       let b = doveImg.pixels[index + 2];
-
       let brightness = (r + g + b) / 3;
       if (brightness < 50) {
-        dots.push(new Dot(x + xOffset, y + yOffset));
+        // 在 origin 上加一點微擾動，避免收縮時過度平整
+        let jitterX = random(-1.5, 1.5);
+        let jitterY = random(-1.5, 1.5);
+        dots.push(new Dot(x + xOffset + jitterX, y + yOffset + jitterY));
       }
     }
   }
@@ -37,9 +43,7 @@ function draw() {
   background(255);
   let mouse = createVector(mouseX, mouseY);
 
-  // 自動擴散/集結循環
-  let phase = sin(frameCount * 0.01); 
-  let explosionStrength = map(phase, -1, 1, 0, 10);  // 散開程度隨 phase 變化
+  updateState();
 
   for (let dot of dots) {
     dot.update(mouse, explosionStrength);
@@ -48,14 +52,39 @@ function draw() {
 
   fill(100);
   textSize(14);
-  text("鴿子散開 / 集結效果", 20, height - 20);
+  text("自然收縮呼吸版", 20, height - 20);
+}
+
+function updateState() {
+  stateTimer++;
+
+  if (state === "expanding") {
+    explosionStrength += 0.08;  // 擴散速度
+    if (explosionStrength >= 5) {
+      explosionStrength = 5;
+      state = "contracting";
+    }
+  } 
+  else if (state === "contracting") {
+    explosionStrength -= 0.12;  // 收縮稍微快一點
+    if (explosionStrength <= 1) {  // 收縮不要到 0，避免完全擠疊
+      explosionStrength = 1;
+      state = "waiting";
+      stateTimer = 0;
+    }
+  } 
+  else if (state === "waiting") {
+    if (stateTimer >60) {  // 約停留 3 秒
+      state = "expanding";
+    }
+  }
 }
 
 class Dot {
   constructor(x, y) {
     this.origin = createVector(x, y);
     this.pos = this.origin.copy();
-    this.vel = p5.Vector.random2D().mult(random(5)); // 起始可有小擾動
+    this.vel = p5.Vector.random2D().mult(random(3));
   }
 
   update(mouseVec, explosionStrength) {
@@ -67,15 +96,18 @@ class Dot {
       this.vel.add(dir);
     }
 
-    // 散開力（擴散）
     let explosion = p5.Vector.sub(this.pos, this.origin);
     explosion.normalize().mult(explosionStrength);
     this.vel.add(explosion);
 
-    // 回歸吸引力
     let attraction = p5.Vector.sub(this.origin, this.pos);
-    attraction.mult(0.02);
+    attraction.mult(0.05);
     this.vel.add(attraction);
+
+    // 停留時增加微擾動
+    if (state === "waiting") {
+      this.pos.add(p5.Vector.random2D().mult(0.3));
+    }
 
     this.vel.mult(0.9);
     this.pos.add(this.vel);
@@ -87,4 +119,4 @@ class Dot {
     fill(gray);
     ellipse(this.pos.x, this.pos.y, 2.8, 2.8);
   }
-} 
+}
