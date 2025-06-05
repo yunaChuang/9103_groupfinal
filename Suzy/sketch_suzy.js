@@ -1,9 +1,8 @@
 let doveImg;
-let chars = ['π', 'Σ', '∞', '@', '#', '*', '%', '&']; // 发光字符集
+let chars = ['π', 'Σ', '∞', '@', '#', '*', '%', '&','^',"$",'¥','=','!','?'];
 let points = [];
 let ripples = [];
 let xOffsetGlobal = 0;
-let font;
 
 function preload() {
   doveImg = loadImage("assets/dovefinal.png");
@@ -33,7 +32,7 @@ function setup() {
 function draw() {
   background(10, 10, 20); // 深色背景
 
-  // 鼠标 X 控制字符整体偏移
+  // 鼠标 X 控制整体偏移
   let dx = map(mouseX, 0, width, -40, 40);
   xOffsetGlobal = lerp(xOffsetGlobal, dx, 0.05);
 
@@ -50,7 +49,7 @@ function draw() {
     }
   }
 
-  fill(120);
+  fill(80, 255, 80);
   textSize(14);
   text("Click = ripple + scatter | Move mouse = dove sways", width / 2, height - 20);
 }
@@ -70,30 +69,24 @@ class CyberChar {
     this.pos = this.base.copy();
     this.vel = createVector(0, 0);
     this.char = random(chars);
-    this.brightnessOffset = random(1000); // 用于闪烁效果
+    this.brightnessOffset = random(1000);
   }
 
   update(globalOffsetX) {
     this.vel.mult(0.9);
     this.pos.add(this.vel);
     let target = createVector(this.base.x + globalOffsetX, this.base.y);
-    let restoring = p5.Vector.sub(target, this.pos).mult(0.04);
+    let restoring = p5.Vector.sub(target, this.pos).mult(0.08); // 回弹速度加快
     this.pos.add(restoring);
   }
 
   display() {
-    push();
-    translate(this.pos.x, this.pos.y);
-
-    // 动态发光亮度
     let alpha = map(sin(frameCount * 0.05 + this.brightnessOffset), -1, 1, 100, 255);
-
-    textSize(12);
-    stroke(0, 255, 255, alpha * 0.4); // 外发光
+    stroke(0, 255, 0, alpha * 0.4); // 荧光绿发光
     strokeWeight(2);
-    fill(0, 255, 255, alpha);
-    text(this.char, 0, 0);
-    pop();
+    fill(0, 255, 0, alpha);
+    textSize(12);
+    text(this.char, this.pos.x, this.pos.y);
   }
 }
 
@@ -112,7 +105,7 @@ class Ripple {
 
   display() {
     noFill();
-    stroke(0, 255, 255, this.opacity); // 青蓝色光圈
+    stroke(0, 255, 0, this.opacity);
     strokeWeight(1.8);
     ellipse(this.x, this.y, this.radius * 2);
   }
