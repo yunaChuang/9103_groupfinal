@@ -1,6 +1,9 @@
 let doveImg;
-let dots = [];
+let chars = ['π', 'Σ', '∞', '@', '#', '*', '%', '&']; // 发光字符集
+let points = [];
+let ripples = [];
 let xOffsetGlobal = 0;
+let font;
 
 function preload() {
   doveImg = loadImage("assets/dovefinal.png");
@@ -8,70 +11,113 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  textFont('monospace');
+  textAlign(CENTER, CENTER);
   doveImg.resize(1000, 0);
   doveImg.loadPixels();
 
   let xOffset = (width - doveImg.width) / 2;
   let yOffset = (height - doveImg.height) / 2;
 
-  for (let y = 0; y < doveImg.height; y += 3) {
-    for (let x = 0; x < doveImg.width; x += 3) {
+  for (let y = 0; y < doveImg.height; y += 6) {
+    for (let x = 0; x < doveImg.width; x += 6) {
       let i = (x + y * doveImg.width) * 4;
       let brightness = (doveImg.pixels[i] + doveImg.pixels[i + 1] + doveImg.pixels[i + 2]) / 3;
       if (brightness < 50) {
-        dots.push(new Dot(x + xOffset, y + yOffset));
+        points.push(new CyberChar(x + xOffset, y + yOffset));
       }
     }
   }
 }
 
 function draw() {
-  background(255);
+  background(10, 10, 20); // 深色背景
 
-  // 根据鼠标 X 的相对位置控制整个点阵左右偏移
+  // 鼠标 X 控制字符整体偏移
   let dx = map(mouseX, 0, width, -40, 40);
-  xOffsetGlobal = lerp(xOffsetGlobal, dx, 0.05); // 平滑过渡
+  xOffsetGlobal = lerp(xOffsetGlobal, dx, 0.05);
 
-  fill(0);
-  noStroke();
-
-  for (let dot of dots) {
-    dot.update(xOffsetGlobal);
-    dot.display();
+  for (let p of points) {
+    p.update(xOffsetGlobal);
+    p.display();
   }
 
-  fill(100);
+  for (let i = ripples.length - 1; i >= 0; i--) {
+    ripples[i].update();
+    ripples[i].display();
+    if (ripples[i].isFinished()) {
+      ripples.splice(i, 1);
+    }
+  }
+
+  fill(120);
   textSize(14);
-  text("Move mouse left/right to sway. Click to scatter.", 20, height - 20);
+  text("Click = ripple + scatter | Move mouse = dove sways", width / 2, height - 20);
 }
 
 function mousePressed() {
-  // 单击触发“爆炸”：所有粒子获得随机速度
-  for (let dot of dots) {
+  for (let p of points) {
     let angle = random(TWO_PI);
-    let force = p5.Vector.fromAngle(angle).mult(random(3, 6));
-    dot.vel.add(force);
+    let force = p5.Vector.fromAngle(angle).mult(random(3, 5));
+    p.vel.add(force);
   }
+  ripples.push(new Ripple(mouseX, mouseY));
 }
 
-class Dot {
+class CyberChar {
   constructor(x, y) {
     this.base = createVector(x, y);
     this.pos = this.base.copy();
     this.vel = createVector(0, 0);
+    this.char = random(chars);
+    this.brightnessOffset = random(1000); // 用于闪烁效果
   }
 
   update(globalOffsetX) {
-    this.vel.mult(0.9); // 摩擦
+    this.vel.mult(0.9);
     this.pos.add(this.vel);
-
-    // 返回原位置 + 左右全局偏移
     let target = createVector(this.base.x + globalOffsetX, this.base.y);
-    let restoringForce = p5.Vector.sub(target, this.pos).mult(0.04);
-    this.pos.add(restoringForce);
+    let restoring = p5.Vector.sub(target, this.pos).mult(0.04);
+    this.pos.add(restoring);
   }
 
   display() {
-    ellipse(this.pos.x, this.pos.y, 2.5);
+    push();
+    translate(this.pos.x, this.pos.y);
+
+    // 动态发光亮度
+    let alpha = map(sin(frameCount * 0.05 + this.brightnessOffset), -1, 1, 100, 255);
+
+    textSize(12);
+    stroke(0, 255, 255, alpha * 0.4); // 外发光
+    strokeWeight(2);
+    fill(0, 255, 255, alpha);
+    text(this.char, 0, 0);
+    pop();
+  }
+}
+
+class Ripple {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.radius = 0;
+    this.opacity = 180;
+  }
+
+  update() {
+    this.radius += 6;
+    this.opacity -= 4;
+  }
+
+  display() {
+    noFill();
+    stroke(0, 255, 255, this.opacity); // 青蓝色光圈
+    strokeWeight(1.8);
+    ellipse(this.x, this.y, this.radius * 2);
+  }
+
+  isFinished() {
+    return this.opacity <= 0;
   }
 }
