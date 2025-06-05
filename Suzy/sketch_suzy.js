@@ -1,4 +1,4 @@
-// === Cyber Dove with Interactive Breaking and Rebound ===
+// === Cyber Dove with Drag-to-Distort + Double-click Reset ===
 let doveImg;
 let cyberDots = [];
 let isCyber = false;
@@ -6,10 +6,12 @@ let lastClick = 0;
 
 function preload() {
   doveImg = loadImage("assets/dovefinal.png");
+  song = loadSound('assets/piano-loops-093-effect-120-bpm.wav');
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  pixelDensity(1);
   textFont("monospace");
   textAlign(CENTER, CENTER);
 
@@ -41,12 +43,12 @@ function draw() {
     }
     fill(180);
     textSize(14);
-    text("Click or drag to break pixels into glowing code. Double-click to restore.", width / 2, height - 20);
+    text("Drag mouse to distort dove into glowing code. Double-click to reset.", width / 2, height - 20);
   } else {
     background(255);
     fill(0);
     for (let d of cyberDots) {
-      ellipse(d.pos.x, d.pos.y, 2.8);
+      d.displayDot();
     }
     fill(100);
     textSize(14);
@@ -58,6 +60,9 @@ function mousePressed() {
   let now = millis();
   if (now - lastClick < 300) {
     isCyber = false;
+    for (let d of cyberDots) {
+      d.broken = false;
+    }
   } else {
     isCyber = true;
   }
@@ -95,7 +100,7 @@ class CyberDot {
   }
 
   display() {
-    if (this.broken) {
+    if (this.broken && isCyber) {
       let flicker = map(sin(frameCount * 0.1 + this.brightnessOffset), -1, 1, 100, 180);
       fill(128, 255, 128, flicker);
       noStroke();
@@ -106,5 +111,9 @@ class CyberDot {
       noStroke();
       ellipse(this.pos.x, this.pos.y, 2.8);
     }
+  }
+
+  displayDot() {
+    ellipse(this.pos.x, this.pos.y, 2.8, 2.8);
   }
 }
