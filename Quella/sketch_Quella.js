@@ -1,10 +1,8 @@
 let doveImg;
 let dots = [];
-let song;
 
 function preload() {
   doveImg = loadImage("assets/dovefinal.png");
-  song = loadSound('assets/piano-loops-093-effect-120-bpm.wav');
 }
 
 function setup() {
@@ -16,8 +14,8 @@ function setup() {
   let xOffset = (width - doveImg.width) / 2;
   let yOffset = (height - doveImg.height) / 2;
 
-  for (let y = 0; y < doveImg.height; y += 3) {
-    for (let x = 0; x < doveImg.width; x += 3) {
+  for (let y = 0; y < doveImg.height; y += 4) {
+    for (let x = 0; x < doveImg.width; x += 4) {
       let index = (x + y * doveImg.width) * 4;
       let r = doveImg.pixels[index];
       let g = doveImg.pixels[index + 1];
@@ -31,57 +29,47 @@ function setup() {
   }
 
   noStroke();
-  fill(0);
-
-  if (song) song.loop(); // 背景音乐循环播放
 }
 
 function draw() {
   background(255);
-  let mouse = createVector(mouseX, mouseY);
+  let t = millis() * 0.001;
 
   for (let dot of dots) {
-    dot.update(mouse);
+    dot.update(t);
     dot.display();
   }
 
   fill(100);
   textSize(14);
-  text("Drag the mouse to animate the dove lines!", 20, height - 20);
+  text("Perlin Noise Driven Flow (clear outline)", 20, height - 20);
 }
 
 class Dot {
   constructor(x, y) {
     this.origin = createVector(x, y);
     this.pos = this.origin.copy();
-    this.vel = createVector(0, 0);
-    this.noiseOffsetX = random(1000);
-    this.noiseOffsetY = random(1000);
+    this.seed = random(1000);  // 每个点独立的随机种子
   }
 
-  update(mouseVec) {
-    let dir = p5.Vector.sub(this.pos, mouseVec);
-    let d = dir.mag();
-
-    if (d < 80 && mouseIsPressed) {
-      dir.setMag(1.2);
-      this.vel.add(dir);
-    }
-
-    // Perlin 噪声轻扰动，即使没有鼠标交互也能动态变化
-    let nX = noise(this.noiseOffsetX + frameCount * 0.005);
-    let nY = noise(this.noiseOffsetY + frameCount * 0.005);
-    let jitter = createVector(nX - 0.5, nY - 0.5).mult(0.6);
-    this.vel.add(jitter);
-
-    this.vel.mult(0.9); 
-    this.pos.add(this.vel);
-
-    let back = p5.Vector.sub(this.origin, this.pos).mult(0.03);
-    this.pos.add(back);
+  update(time) {
+    // 使用 Perlin 噪声生成扰动角度
+    let noiseVal = noise(this.origin.x * 0.002, this.origin.y * 0.002, time * 0.5 + this.seed);
+    let angle = noiseVal * TWO_PI * 2; // 两圈以内
+    let radius = 5; // 扰动范围不大，保持轮廓清晰
+    this.pos.x = this.origin.x + cos(angle) * radius;
+    this.pos.y = this.origin.y + sin(angle) * radius;
   }
 
   display() {
-    ellipse(this.pos.x, this.pos.y, 2.8, 2.8);
+    // 渐变颜色：从上方蓝色 (#3b82f6) 到下方紫色 (#a855f7)
+    let gradientRatio = constrain(this.pos.y / height, 0, 1);
+    let r = lerp(59, 168, gradientRatio);
+    let g = lerp(130, 85, gradientRatio);
+    let b = lerp(246, 247, gradientRatio);
+    fill(r, g, b);
+    ellipse(this.pos.x, this.pos.y, 2.2, 2.2);
   }
 }
+
+

@@ -1,8 +1,9 @@
-// === Cyber Dove – Free-Form Drag Distortion & Isolated Modes ===
+// === Cyber Dove – Discrete Click + Direct Point Disruption ===
 let doveImg;
 let cyberDots = [];
 let isCyber = false;
 let lastClick = 0;
+let clickFlash = 0;
 
 function preload() {
   doveImg = loadImage("assets/dovefinal.png");
@@ -43,14 +44,18 @@ function draw() {
     }
     fill(180);
     textSize(14);
-    text("Drag to distort the dove into code. Double-click to reset.", width / 2, height - 20);
+    text("Drag or click on the dove to disrupt it. Double-click to reset.", width / 2, height - 20);
   } else {
     background(255);
-    fill(0);
     for (let d of cyberDots) {
       d.displayDot();
     }
-    fill(100);
+    if (clickFlash > 0) {
+      fill(0, 0, 0, clickFlash);
+      rect(0, 0, width, height);
+      clickFlash -= 8;
+    }
+    fill(0);
     textSize(14);
     text("Click to enter cyber mode.", width / 2, height - 20);
   }
@@ -62,17 +67,32 @@ function mousePressed() {
     isCyber = false;
     for (let d of cyberDots) {
       d.broken = false;
+      d.vel.mult(0);
+      d.pos = d.origin.copy();
     }
   } else {
     isCyber = true;
+    clickFlash = 100;
   }
   lastClick = now;
+
+  if (isCyber) {
+    // Click-based disruption of nearby points (direct blast)
+    for (let d of cyberDots) {
+      let distToMouse = dist(mouseX, mouseY, d.pos.x, d.pos.y);
+      if (distToMouse < 60) {
+        d.broken = true;
+        let angle = random(TWO_PI);
+        let mag = random(1.5, 2.5);
+        d.vel.add(p5.Vector.fromAngle(angle).mult(mag));
+      }
+    }
+  }
 }
 
 function mouseDragged() {
   if (isCyber) {
     for (let d of cyberDots) {
-      // Freeform distortion: fluid randomness, no geometric constraint
       let randOffset = random(0.5, 1.5);
       let distToMouse = dist(mouseX + random(-30, 30), mouseY + random(-30, 30), d.pos.x, d.pos.y);
       if (distToMouse < 40 * randOffset) {
@@ -117,6 +137,8 @@ class CyberDot {
   }
 
   displayDot() {
+    fill(0);
+    noStroke();
     ellipse(this.pos.x, this.pos.y, 2.8, 2.8);
   }
 }
