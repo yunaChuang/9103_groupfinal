@@ -1,4 +1,3 @@
-// === Combined Cyber Dove + Audio Spectrum + Speed Sound ===
 let doveImg;
 let dots = [];
 let cyberDots = [];
@@ -7,16 +6,14 @@ let lastClick = 0;
 let clickFlash = 0;
 let song;
 let speedSound;
-let analyser;
-let fft;
-let numBins = 256;
-let smoothSound = 0.8;
 let speedPlayed = false;
 let musicButton;
+let analyser;
 
 function preload() {
   doveImg = loadImage("assets/dovefinal.png");
   song = loadSound("assets/alien.wav");
+  speedSound = loadSound("assets/piano-loops-093-effect-120-bpm.wav");
 }
 
 function setup() {
@@ -44,12 +41,10 @@ function setup() {
     }
   }
 
+  song.loop();
+
   analyser = new p5.Amplitude();
   analyser.setInput(song);
-
-  fft = new p5.FFT(smoothSound, numBins);
-  song.connect(fft);
-  song.loop();
 
   musicButton = createButton("Pause Music");
   musicButton.position(20, 20);
@@ -71,7 +66,7 @@ function draw() {
   } else {
     background(255);
     for (let d of dots) {
-      d.update(0);
+      d.update(createVector(mouseX, mouseY), getExplosionStrength());
       d.display();
     }
     if (clickFlash > 0) {
@@ -84,27 +79,16 @@ function draw() {
     text("Click to enter cyber mode. Click once to trigger speed sound.", width / 2, height - 20);
   }
 
-  let amplitude = fft.getEnergy(20, 20000);
-  let spectrum = fft.analyze();
+  // Draw ellipse based on audio amplitude
+  let level = analyser.getLevel(); // 0.0 to 1.0
+  let ellipseSize = map(level, 0, 0.4, 100, 150); // tweak as needed
+  fill(255, 200, 0, 180);
+  noStroke();
+  ellipse(100, 100, ellipseSize);
+}
 
-  let minDimension = min(width, height);
-  let circleRadius = minDimension / 5;
-  let maxRectLength = (minDimension * 2) / 5;
-  translate(0, 0);
-
-  for (let i = 0; i < spectrum.length; i++) {
-    let angle = map(i, 0, spectrum.length, 0, TWO_PI);
-    let rectHeight = map(spectrum[i], 0, 255, 0, maxRectLength);
-    push();
-    rotate(angle);
-    fill(map(i, 0, spectrum.length, 0, 255), 200, 0);
-    rect(0, circleRadius, width / spectrum.length, rectHeight);
-    pop();
-  }
-
-  let innerCircleSize = map(amplitude, 0, 255, circleRadius / 5, circleRadius);
-  fill(255, 200, 0);
-  ellipse(0, 0, innerCircleSize * 3);
+function getExplosionStrength() {
+  return map(sin(frameCount * 0.02), -1, 1, 1, 5);
 }
 
 function mousePressed() {
@@ -167,20 +151,41 @@ function toggleMusic() {
 
 class Dot {
   constructor(x, y) {
-    this.base = createVector(x, y);
-    this.pos = this.base.copy();
-    this.vel = createVector(0, 0);
+    this.origin = createVector(x, y);
+    this.pos = this.origin.copy();
+    this.vel = p5.Vector.random2D().mult(random(3));
   }
 
-  update(globalOffsetX) {
+  update(mouseVec, explosionStrength) {
+    let dir = p5.Vector.sub(this.pos, mouseVec);
+    let d = dir.mag();
+
+    if (d < 80 && mouseIsPressed) {
+      dir.setMag(1.2);
+      this.vel.add(dir);
+    }
+
+    let explosion = p5.Vector.sub(this.pos, this.origin);
+    explosion.normalize().mult(explosionStrength);
+    this.vel.add(explosion);
+
+    let attraction = p5.Vector.sub(this.origin, this.pos);
+    attraction.mult(0.05);
+    this.vel.add(attraction);
+
+    if (explosionStrength < 2) {
+      this.pos.add(p5.Vector.random2D().mult(0.3));
+    }
+
+    this.vel.limit(5);
     this.vel.mult(0.9);
     this.pos.add(this.vel);
-    let target = createVector(this.base.x + globalOffsetX, this.base.y);
-    let restoringForce = p5.Vector.sub(target, this.pos).mult(0.04);
-    this.pos.add(restoringForce);
   }
 
   display() {
+    let t = frameCount * 0.02 + this.pos.y * 0.005;
+    let gray = 125 + 75 * sin(t);
+    fill(gray);
     ellipse(this.pos.x, this.pos.y, 2.8, 2.8);
   }
 }
@@ -214,11 +219,5 @@ class CyberDot {
       noStroke();
       ellipse(this.pos.x, this.pos.y, 2.8);
     }
-  }
-
-  displayDot() {
-    fill(0);
-    noStroke();
-    ellipse(this.pos.x, this.pos.y, 2.5, 2.5);
   }
 }
