@@ -87,4 +87,4 @@ class Dot {
     fill(gray);
     ellipse(this.pos.x, this.pos.y, 2.8, 2.8);
   }
-}
+} 
