@@ -72,9 +72,9 @@ function draw() {
   let ellipseSize = map(amp, 0.3, 0.4, 80, 200);
 
   if (isCyber) {
-    fill(0, 255, 240, 70);
+    fill(0, 255, 240, 120);
   } else {
-    fill(255, 50, 50, 150);
+    fill(255, 50, 50, 100);
   }
 
   circle(width, (height - ellipseSize) / 2, ellipseSize*2);
