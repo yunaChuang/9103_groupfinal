@@ -1,5 +1,6 @@
-# Peace of Dove 
-### sound
+# Peace of Dove
+### Sound
+### Group D
 
 | Name              | Unikey     |  
 |-------------------|------------|  
@@ -19,7 +20,7 @@
 
 I chose to animate the dove image using a **dual-mode system**:
 - **Normal Mode**: A calm, interactive dot field that reacts gently to mouse movement.
-- **Cyber Mode**: A bold transformation using green particle effects, speed sound, and ellipse bursts driven by sound input.
+- **Cyber Mode**: A bold transformation using black background with green colour ellispes to match 
 
 ## Animation Driver
 
@@ -41,4 +42,3 @@ I was inspired by:
 - Cyberpunk aesthetics and music visualizers.
 - Retro-style sci-fi UI and glitch effects.
 - [Example](https://media.giphy.com/media/3o6Mbbs879ozZ9Yic0/giphy.gif): Orbiting reactive shapes inspired my FFT visual output.
-- [Example](https://giphy.com/gifs/animation-techno-digital-3o7bu3XilJ5BOiSGic): Use of green glow and dots in futuristic UI.

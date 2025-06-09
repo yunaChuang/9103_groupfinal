@@ -1,7 +1,6 @@
 let doveImg;
 let dots = [];
 let isCyber = false;
-
 let song;
 let fft, analyser;
 let speedSound;
@@ -69,9 +68,10 @@ function draw() {
     fill(255, 50, 50, 100);
   }
 
-  circle(width, (height - ellipseSize) / 2, ellipseSize * 2);
+  circle(width, height, ellipseSize * 2);
   ellipse(width / 2, (height - ellipseSize) / 2, ellipseSize / 2);
   ellipse(width / 4, height, ellipseSize / 2);
+  ellipse(width / 4, 0, 300- ellipseSize);
 
   if (isCyber) {
     fill(100, 250, 205, 100);
@@ -79,8 +79,9 @@ function draw() {
     fill(255, 50, 200, 100);
   }
 
-  ellipse(0, (height - ellipseSize) / 2, 200 - ellipseSize);
-  ellipse((width * 3) / 4, height + 10, ellipseSize / 2);
+  ellipse(0, (height - ellipseSize) / 2, 400 - ellipseSize);
+  ellipse((width * 3) / 4, height + 10, ellipseSize);
+  ellipse((width * 1) / 4, height + 10, ellipseSize);
 
   // === FREQUENCY-BASED CIRCLES ===
   let currentSpectrum = fft.analyze();
