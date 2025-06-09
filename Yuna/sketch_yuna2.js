@@ -1,6 +1,5 @@
 let doveImg;
 let dots = [];
-let cyberDots = [];
 let isCyber = false;
 
 let song;
@@ -37,7 +36,6 @@ function setup() {
         let px = x + xOffset;
         let py = y + yOffset;
         dots.push(new Dot(px, py));
-        cyberDots.push(new CyberDot(px, py));
       }
     }
   }
@@ -53,21 +51,15 @@ function setup() {
 
 function draw() {
   background(isCyber ? 0 : 255);
-  let mouse = createVector(mouseX, mouseY);
 
-  if (isCyber) {
-    for (let d of cyberDots) {
-      d.update();
-      d.display();
-    }
-  } else {
-    for (let d of dots) {
-      d.update(mouse);
-      d.display();
-    }
+  // === Dot Particles Update ===
+  let mouse = createVector(mouseX, mouseY);
+  for (let d of dots) {
+    d.update(mouse);
+    d.display();
   }
 
-  // === AMPLITUDE-BASED MACHINES ===
+  // === AMPLITUDE-BASED ELLIPSES ===
   let amp = analyser.getLevel();
   let ellipseSize = map(amp, 0.3, 0.4, 80, 200);
 
@@ -77,7 +69,7 @@ function draw() {
     fill(255, 50, 50, 100);
   }
 
-  circle(width, (height - ellipseSize) / 2, ellipseSize*2);
+  circle(width, (height - ellipseSize) / 2, ellipseSize * 2);
   ellipse(width / 2, (height - ellipseSize) / 2, ellipseSize / 2);
   ellipse(width / 4, height, ellipseSize / 2);
 
@@ -141,7 +133,7 @@ function draw() {
   textSize(14);
   text(
     isCyber
-      ? "Cyber Mode: Hold mouse for green particles + speed sound"
+      ? "Cyber Mode: Hold mouse for effects + cyber sound"
       : "Click to play music. Hold mouse for cyber mode",
     width / 2,
     height - 20
@@ -155,12 +147,6 @@ function mousePressed() {
 
   isCyber = true;
 
-  for (let d of cyberDots) {
-    let angle = random(TWO_PI);
-    let mag = random(2, 4);
-    d.vel = p5.Vector.fromAngle(angle).mult(mag);
-  }
-
   if (!speedPlayed) {
     speedSound.play();
     speedPlayed = true;
@@ -173,11 +159,6 @@ function mouseReleased() {
 
   if (speedSound.isPlaying()) {
     speedSound.stop();
-  }
-
-  for (let d of cyberDots) {
-    d.pos = d.origin.copy();
-    d.vel.set(0, 0);
   }
 }
 
@@ -206,27 +187,5 @@ class Dot {
   display() {
     fill(128, 70, 240);
     ellipse(this.pos.x, this.pos.y, 2.8, 2.8);
-  }
-}
-
-class CyberDot {
-  constructor(x, y) {
-    this.origin = createVector(x, y);
-    this.pos = this.origin.copy();
-    this.vel = createVector(0, 0);
-  }
-
-  update() {
-    this.vel.mult(0.8);
-    this.pos.add(this.vel);
-    let back = p5.Vector.sub(this.origin, this.pos).mult(0.07);
-    this.pos.add(back);
-  }
-
-  display() {
-    if (isCyber) {
-      fill(158, 255, 128);
-      ellipse(this.pos.x, this.pos.y, 2.8);
-    }
   }
 }
