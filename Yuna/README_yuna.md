@@ -56,11 +56,12 @@ I was inspired by:
 
 ## Changes to Group Code
 
+I did some small changes of the group code to make my personal work has a higher consistency
 - The colour of the background dots  
 - The density of the background dots  
 - A slight change in the way the dots scatter  
 
 ## Tools & External Techniques
 
-- ChatGPT helped a lot in explaining the code and improving my understanding of p5.js  
-- [p5.js](https://p5js.org)
+- ChatGPT helped a lot in explaining the code and improving my understanding of p5.js. I had all the ideas myself and tried to develop them based on what we learned in the course. But sometimes it was hard to achieve exactly what I imagined, so I used AI tool to help better express and implement my thoughts. Most of the time, i ask ChatGPT to tell me the full code and explain them step by step.
+- [p5.js](https://p5js.org) Of course, p5.js helped me a lot in understanding how the code works and allowed me to realise how to use it in a simple and basic way.
