@@ -1,5 +1,5 @@
-# Dove in the Dream
-##### （Meditation）
+# Dove in the Dream —— Meditation
+
 ### User Input
 ### Group D
 
