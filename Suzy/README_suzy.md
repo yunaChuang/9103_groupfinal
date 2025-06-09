@@ -1,10 +1,16 @@
-# Peace of Dove — Interactive Cyberpunk Artwork
+# Peace of Dove
+### User Input
+### Group D
+
+| Name              | Unikey     |  
+|-------------------|------------|  
+| Su Lyu            | slyu0503   |
 
 ## Project Overview
 
 This project is an individual extension of the group-coded pigeon dot-matrix base. It transforms a static pixel image into an interactive neon-infused drawing and particle experience. The work is inspired by cyberpunk aesthetics and designed to explore **user interaction as a primary driver of animation**.
 
-## Interaction Instructions
+## How to Interact
 
 - **Click** near the dove to trigger an **explosive burst** of glowing particles
 - **Drag** the mouse to draw **cyberpunk-style glowing characters**
@@ -12,14 +18,7 @@ This project is an individual extension of the group-coded pigeon dot-matrix bas
 - **Press `S`** to save PNG image
 - **Press `Q`** to change background color
 
-## Animation Driver: User Input
-
-This version uses **mouse input** to animate and transform the artwork. Key behaviors include:
-- Clicking near particles (brush strokes) triggers a **cyber-style explosion** effect
-- Dragging the mouse leaves behind **layered glowing characters**, simulating a digital graffiti trail
-- No automatic motion or external timing — all changes are **directly user-controlled**
-
-## Individual Approach & Uniqueness
+## My Individual Animation Approach
 
 While the original group code visualized a dove with elastic particle dots, my version expands it by:
 - **Adding stylized drawing interactions** using p5.js `createGraphics()`
@@ -28,6 +27,14 @@ While the original group code visualized a dove with elastic particle dots, my v
 - **Incorporating explosion physics** with damping and recovery for each particle
 
 These changes result in a more **expressive, interactive, and aesthetic-focused experience**, highlighting the visual pleasure of user disruption and creation.
+
+## Animation Driver: User Input
+
+This version uses **mouse input** to animate and transform the artwork. Key behaviors include:
+- Clicking near particles (brush strokes) triggers a **cyber-style explosion** effect
+- Dragging the mouse leaves behind **layered glowing characters**, simulating a digital graffiti trail
+- No automatic motion or external timing — all changes are **directly user-controlled**
+
 
 ## Technical Breakdown
 
@@ -40,7 +47,7 @@ These changes result in a more **expressive, interactive, and aesthetic-focused 
 ## Inspiration
 
 This piece is visually inspired by:
-- **Cyberpunk digital art** (e.g., _Blade Runner_, vaporwave posters)
+- **Cyberpunk digital art** (e.g., _Blade Runner_)
 - **Interactive graffiti art** and **digital calligraphy**
 - The idea of “disruption and restoration” in modern visual coding
 
@@ -51,7 +58,7 @@ This piece is visually inspired by:
 - `README.md`: This file
 - `index.html`: HTML wrapper for browser launch
 
-## 🧾 Acknowledgments & Tools
+## Acknowledgments & Tools
 
 - Built using [p5.js](https://p5js.org/)
 - Image: Custom dove silhouette (group base)
