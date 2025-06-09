@@ -1,50 +1,69 @@
-# 🕊️ Cyber Dove – Glitch-Inspired Interactive Animation
+# Dove in the Dream —— Meditation
 
-## 🎮 Mode: User Input (Mouse Interaction)
+### User Input
+### Group D
 
-### 🧠 Concept
-This project reimagines a peaceful dove composed of pixel dots. Through user interaction, the dove momentarily breaks into a chaotic array of glowing symbolic characters. Inspired by glitch and cyber aesthetics, the project captures the contrast between order and digital disruption.
+| Name              | Unikey     |  
+|-------------------|------------|  
+| Su Lyu            | slyu0503   |
 
----
+## Project Overview
 
-## ✨ Interaction Features
+This project is an individual extension of the group-coded pigeon dot-matrix base. It transforms a static pixel image into an interactive neon-infused drawing and particle experience. The work is inspired by cyberpunk aesthetics and designed to explore **user interaction as a primary driver of animation**.
 
-| Action               | Behavior                                                                 |
-|----------------------|--------------------------------------------------------------------------|
-| 🖱️ Single Click       | Activates **Cyber Mode**                                                 |
-| 🖱️ Click on Dove     | **Breaks character-forming dots** into glowing symbols                   |
-| 🖱️ Drag in Cyber Mode| Continuously breaks more points along the path of the mouse              |
-| 🔁 Rebound Effect     | Broken characters **gradually float back** to their original dot position |
-| 🖱️ Double Click       | Resets everything to **original dot-based dove**                         |
+## How to Interact
 
----
+- **Click** near the dove to trigger an **explosive burst** of glowing particles
+- **Drag** the mouse to draw **cyberpunk-style glowing characters**
+- **Press `R`** to reset the page
+- **Press `S`** to save PNG image
+- **Press `Q`** to change background color
 
-## 🎨 Visual States
+## My Individual Animation Approach
 
-### 🕊️ Default (Dot Mode)
+While the original group code visualized a dove with elastic particle dots, my version expands it by:
+- **Adding stylized drawing interactions** using p5.js `createGraphics()`
+- **Replacing grayscale dot visuals** with vibrant **cyberpunk color palettes** and characters (`*, #, |, >, 0, 1`)
+- **Eliminating auto-rotation and mouse-orbit logic** to focus on user-driven effects only
+- **Incorporating explosion physics** with damping and recovery for each particle
 
-- Dove is formed entirely by **black dots** extracted from a reference image.
-- No animation, no interaction – fully **static and peaceful**.
-- Mouse input has **no effect** in this mode.
+These changes result in a more **expressive, interactive, and aesthetic-focused experience**, highlighting the visual pleasure of user disruption and creation.
 
-### 💥 Cyber Mode (Interactive Glitch)
+## Animation Driver: User Input
 
-- Background turns dark (deep blue).
-- **Clicking or dragging on dove** disrupts its structure:
-  - Dots become characters like `π`, `∞`, `Σ`, `*`, `#`, etc.
-  - Each character flickers softly in green tones.
-  - Broken regions slowly revert back to dot form with elastic movement.
+This version uses **mouse input** to animate and transform the artwork. Key behaviors include:
+- Clicking near particles (brush strokes) triggers a **cyber-style explosion** effect
+- Dragging the mouse leaves behind **layered glowing characters**, simulating a digital graffiti trail
+- No automatic motion or external timing — all changes are **directly user-controlled**
 
----
 
-## 🧩 Technical Overview
+## Technical Breakdown
 
-### Dot State Handling
+- `BrushStroke` class handles particle position, explosion velocity, and recovery logic
+- `addPaintMark()` uses `createGraphics()` to place glowing character layers on a transparent canvas
+- Color palettes use RGBA values for **neon effects**
+- `mousePressed` and `mouseDragged` are the only triggers — **no frame-based automation**
+- `keyPressed` supports utility shortcuts (`R`, `S`, `Q`) for interactivity
 
-```js
-if (isCyber) {
-  if (d < 60 && mouseIsPressed) {
-    this.broken = true;
-    this.vel.add(p5.Vector.random2D().mult(random(2, 5)));
-  }
-}
+## Inspiration
+
+This piece is visually inspired by:
+- **Cyberpunk digital art** (e.g., _Blade Runner_)
+- **Interactive graffiti art** and **digital calligraphy**
+- The idea of “disruption and restoration” in modern visual coding
+
+## Repository Contents
+
+- `sketch.js`: Main p5.js animation code
+- `assets/dovefinal.png`: Base image for dove outline
+- `README.md`: This file
+- `index.html`: HTML wrapper for browser launch
+
+## Acknowledgments & Tools
+
+- Built using [p5.js](https://p5js.org/)
+- Image: Custom dove silhouette (group base)
+- Character & color inspiration from [cyberpunk color palette](https://lospec.com/palette-list/cyberpunk-neon)
+- Developed with VS Code
+
+> This submission is my own work and follows the academic integrity requirements of the University of Sydney.
