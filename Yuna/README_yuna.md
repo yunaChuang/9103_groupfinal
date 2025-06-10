@@ -40,8 +40,8 @@ I focused on adding layers of **audio-driven** and **interactive animation** to 
 ## Inspiration
 
 I was inspired by:  
-- [Example](https://www.auntyflo.com/dream-dictionary/dreams-about-eyes#google_vignette): Dreams and eyes are highly connected.  
-- [Example](https://www.istockphoto.com/photo/close-up-image-of-racing-pigeon-eye-gm1186176382-334586206): Birds and their eyes (sorry for being scary)
+- [Article](https://www.auntyflo.com/dream-dictionary/dreams-about-eyes#google_vignette): Dreams and eyes are highly connected.  
+- [Image](https://www.istockphoto.com/photo/close-up-image-of-racing-pigeon-eye-gm1186176382-334586206): Birds and their eyes (sorry for being scary)
 
 ## Technical Explanation
 
@@ -63,5 +63,5 @@ I did some small changes of the group code to make my personal work has a higher
 
 ## Tools & External Techniques
 
-- ChatGPT helped a lot in explaining the code and improving my understanding of p5.js. I had all the ideas myself and tried to develop them based on what we learned in the course. But sometimes it was hard to achieve exactly what I imagined, so I used AI tool to help better express and implement my thoughts. Most of the time, i ask ChatGPT to tell me the full code and explain them step by step.
+- ChatGPT helped a lot in explaining the code and improving my understanding of p5.js. I had all the ideas myself and tried to develop them based on what we learned in the course. But sometimes it was hard to achieve exactly what I imagined, so I used AI tool to help better express and implement my thoughts. Most of the time, I asked ChatGPT to tell me the full code and explain them step by step.
 - [p5.js](https://p5js.org) Of course, p5.js helped me a lot in understanding how the code works and allowed me to realise how to use it in a simple and basic way.
