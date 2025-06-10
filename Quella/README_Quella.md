@@ -1,36 +1,54 @@
-# 🕊️ Peace Dove – Perlin Noise Ink Animation
+# 🕊️ Perlin Noise & Randomness Animation – Individual Submission (Quella He)
 
-## 🌫️ Animation Type: Perlin Noise + Randomness
-
-This version of the peace dove animation uses **Perlin noise and randomness** to simulate **flowing ink patterns**, resembling traditional East Asian **shui-mo (水墨)** aesthetics.
-
----
-
-## 🎨 Visual Concept
-
-- 🐦 A dove image remains still in the center of the canvas
-- 🖌️ Random ink dots drift and expand slowly based on Perlin noise
-- 🧘‍♂️ No interaction required — a slow meditative motion
+## 🎮 How to Interact with the Work
+Move your mouse across the canvas.  
+When the mouse approaches any brush stroke, the particles react and flow around the cursor.  
+When the mouse leaves, the strokes gradually return to their original positions using Perlin noise and vector interpolation.
 
 ---
 
-## 🧠 My Individual Approach
+## 🔧 Individual Animation Details
 
-I chose **Perlin noise and randomness** as my animation method. This sets my work apart from teammates who use audio or input-driven animation.
+### 🎨 Technique Used
+I selected **Perlin noise and randomness** as the main drivers for this animation.  
+Each stroke moves based on time-evolving Perlin noise values, producing organic and fluid motion. Randomness is added to control:
+- slight color shifts
+- particle angles
+- transparency (alpha)
+- return speed
 
-### What’s unique:
-- Noise-based, continuous motion
-- Watercolor/ink-inspired look
-- Uses `noise()` to control subtle, naturalistic drifting behavior
+### ✨ What Makes My Version Unique
+- Introduced **three layered brush strokes**, each with its own scale and motion radius.
+- Used **mouse distance** to trigger dynamic interaction – closer strokes are pulled into orbit by the mouse.
+- Created a **shimmering ink-painting feel** through frame-by-frame color jitter.
+- Combined **Perlin-based flow** with **random seed individuality** for rich visual texture.
 
 ---
 
-## 💡 Inspiration
+## 🌱 Inspiration
+This work is inspired by traditional **Chinese ink painting**, where brush strokes suggest motion and energy.  
+I also drew from generative artworks by **Zach Lieberman**, whose use of Perlin noise fields deeply influenced the flow dynamics in my code.
 
-Inspired by:
-- Chinese ink painting (水墨画)
-- Generative “ink blot” aesthetics seen on [OpenProcessing](https://openprocessing.org/)
-- p5.js creative coding examples using `noise()` for natural motion
+---
+
+## 📘 Explanation of Key Decisions
+- **Perlin Noise** is used to generate consistent but evolving motion paths.
+- **Random offsets** avoid visual repetition and keep each stroke unique.
+- Used `lerp()` for smooth return transitions after interaction.
+- Each particle has a unique `seed` to prevent synchronized movement.
+
+---
+
+## 📚 References and Tools
+- Tools used: `p5.js`, native functions like `noise()`, `p5.Vector`, `lerp()`
+- No third-party libraries or AI-generated code were used.
+- The group code provided the base structure for parsing the image and rendering layered particles. I extended it by adding interaction logic and flow behavior.
+
+---
+
+## 🖼️ Group Artwork Reference
+Based on the image **"Dove of Peace" by Pablo Picasso** (not part of the official artwork list but used for code development).
+
 
 ---
 
