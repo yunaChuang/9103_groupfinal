@@ -35,7 +35,7 @@ I focused on adding layers of **audio-driven** and **interactive animation** to 
 | Property               | Behaviour                                            | How Mine Is Different                  |
 |------------------------|------------------------------------------------------|---------------------------|
 | Dot motion             | Dots scatter when the mouse is nearby                | With a different dot density                    |
-| Colour switching       | Dreamy colour ↔ red/green                            | I focus on the two opposite mode              | 
+| Colour switching       | Dreamy colour ↔ red/green                            | I focus on the two opposite modes              | 
 | Sound-reactive circles | Bouncing top-row circles tied to music amplitude     | I add a different sound in dark mode               |
 | Audio-controlled glow  | Dots pulse and jitter based on amplitude             | I have the sound data to interact with              |
 | Volume control         | Vertical mouse position maps to audio volume         | A key part of soound interaction                |
