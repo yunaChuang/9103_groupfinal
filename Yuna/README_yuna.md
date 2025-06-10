@@ -70,4 +70,4 @@ I did some small changes of the group code to make my personal work has a higher
 [ChatGPT](https://chatgpt.com/share/6847ee6c-e658-800f-8483-6ed4ac311111)
 [ChatGPT](https://chatgpt.com/share/6847eee5-7f98-800f-b918-23e87253133e)
 [ChatGPT](https://chatgpt.com/share/6847ef20-93a0-800f-baa3-6d54d8a697e4)
-- [p5.js](https://p5js.org) Of course, p5.js helped me a lot in understanding how the code works and allowed me to realise how to use it in a simple and basic way.
+- [p5.js](https://p5js.org) p5.js helped me a lot in understanding how the code works and allowed me to realise how to use it in a simple and basic way.
