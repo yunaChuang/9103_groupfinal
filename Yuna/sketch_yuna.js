@@ -124,9 +124,9 @@ function setVolumeWithMouse() {
 
 function drawMouseVolumeCircle() {
   let vol = constrain(map(mouseY, height, 0, 0, 1), 0, 1);
-  let circleSize = map(vol, 0, 1, 10, 50);
+  let circleSize = map(vol, 0, 1, 10, 100);
 
-  fill(250, 10, 10);
+  fill(250, 10, 10,80);
   noStroke();
   ellipse(mouseX, mouseY, circleSize * 1.2, circleSize );
 }
