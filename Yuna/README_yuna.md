@@ -29,13 +29,13 @@ I focused on adding layers of **audio-driven** and **interactive animation** to 
 
 ## Animated Properties
 
-| Property               | Behaviour                                             | Unique Compared to Group         |
-|------------------------|------------------------------------------------------|----------------------------------|
-| Dot motion             | Dots scatter when the mouse is nearby                | Others use click or static image |
-| Colour switching       | Smooth pastel ↔ red/green                            | Others focus on scaling          |
-| Sound-reactive circles | Bouncing top-row circles tied to music amplitude     | Unique layer of rhythmic motion  |
-| Audio-controlled glow  | Dots pulse and jitter based on amplitude             | Subtle, not present in other code|
-| Volume control         | Vertical mouse position maps to audio volume         | Interactive audio not universal  |
+| Property               | Behaviour                                            |
+|------------------------|------------------------------------------------------|
+| Dot motion             | Dots scatter when the mouse is nearby                |
+| Colour switching       | Dreamy colour ↔ red/green                            |
+| Sound-reactive circles | Bouncing top-row circles tied to music amplitude     |
+| Audio-controlled glow  | Dots pulse and jitter based on amplitude             |
+| Volume control         | Vertical mouse position maps to audio volume         |
 
 ## Inspiration
 
