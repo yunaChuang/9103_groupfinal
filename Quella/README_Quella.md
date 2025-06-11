@@ -71,7 +71,7 @@ Based on the image **"Dove of Peace" by Pablo Picasso** (not part of the officia
 
 ---
 
-##  Technical Explanation
+## Technical Explanation
 
 - **Perlin noise:** Used to calculate flow angle and smooth motion over time.
 - **Random values:** Control initial position offset, length, width, angle, color variation, and transparency.
@@ -80,7 +80,7 @@ Based on the image **"Dove of Peace" by Pablo Picasso** (not part of the officia
 
 ---
 
-##  Tools & External Techniques
+## Tools & External Techniques
 
 - **ChatGPT**  I asked it for ideas, then rewrote or tested them myself. 
 - **p5.js** (https://p5js.org)
