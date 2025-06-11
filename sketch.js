@@ -2,16 +2,15 @@ let doveImg;
 let dots = [];
 
 function preload() {
-  // Load the dove image and background music
+  // Load the dove image
   doveImg = loadImage("assets/dovefinal.png");
-  song = loadSound('assets/piano-loops-093-effect-120-bpm.wav');
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   pixelDensity(1); // Use 1 display pixel per canvas pixel for accuracy
 
-  // Resize image to width = 600px, height is auto-calculated
+  // Resize image to width = 1000px, height is auto-calculated
   doveImg.resize(1000, 0);
   doveImg.loadPixels();
 
@@ -47,12 +46,6 @@ function draw() {
     dot.update(mouse);
     dot.display();
   }
-
-  // Instructional text
-  fill(100);
-  textSize(14);
-  text("Drag the mouse to animate the dove lines!", 20, height - 20);
-
 }
 
 // Dot class: defines each moving point on the dove image

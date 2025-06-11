@@ -6,6 +6,9 @@
 |-------------------|------------|  
 | Yuan-Yuan Chuang  | ychu0126   |
 
+## Overview
+In my personal work's default mode, the visuals are calming, evoking a dreamy, meditative state as we want to present in our group major idea. However, holding down the mouse shifts the experience dramatically to "dark mode." The background turns black and an electronic "alien" sound plays. Here, the dove takes on a more unsettling, nightmare-like presence, as if watching you with the pop up eye.
+
 ## How to Interact
 
 1. **Click** anywhere on the canvas to start the music.  
@@ -29,19 +32,19 @@ I focused on adding layers of **audio-driven** and **interactive animation** to 
 
 ## Animated Properties
 
-| Property               | Behaviour                                             | Unique Compared to Group         |
-|------------------------|------------------------------------------------------|----------------------------------|
-| Dot motion             | Dots scatter when the mouse is nearby                | Others use click or static image |
-| Colour switching       | Smooth pastel ↔ red/green                            | Others focus on scaling          |
-| Sound-reactive circles | Bouncing top-row circles tied to music amplitude     | Unique layer of rhythmic motion  |
-| Audio-controlled glow  | Dots pulse and jitter based on amplitude             | Subtle, not present in other code|
-| Volume control         | Vertical mouse position maps to audio volume         | Interactive audio not universal  |
+| Property               | Behaviour                                            | How Mine Is Different                  |
+|------------------------|------------------------------------------------------|---------------------------|
+| Dot motion             | Dots scatter when the mouse is nearby                | With a different dot density                    |
+| Colour switching       | Dreamy colour ↔ red/green                            | I focus on the two opposite modes              | 
+| Sound-reactive circles | Bouncing top-row circles tied to music amplitude     | I add a different sound in dark mode               |
+| Audio-controlled glow  | Dots pulse and jitter based on amplitude             | I have the sound data to interact with              |
+| Volume control         | Vertical mouse position maps to audio volume         | A key part of soound interaction                |
 
 ## Inspiration
 
 I was inspired by:  
-- [Example](https://www.auntyflo.com/dream-dictionary/dreams-about-eyes#google_vignette): Dreams and eyes are highly connected.  
-- [Example](https://www.istockphoto.com/photo/close-up-image-of-racing-pigeon-eye-gm1186176382-334586206): Birds and their eyes (sorry for being scary)
+- [Article](https://www.auntyflo.com/dream-dictionary/dreams-about-eyes#google_vignette): Dreams and eyes are highly connected.  
+- [Image](https://www.istockphoto.com/photo/close-up-image-of-racing-pigeon-eye-gm1186176382-334586206): Birds and their eyes (sorry for being scary)
 
 ## Technical Explanation
 
@@ -56,11 +59,15 @@ I was inspired by:
 
 ## Changes to Group Code
 
+I did some small changes of the group code to make my personal work has a higher consistency
 - The colour of the background dots  
 - The density of the background dots  
 - A slight change in the way the dots scatter  
 
 ## Tools & External Techniques
 
-- ChatGPT helped a lot in explaining the code and improving my understanding of p5.js  
-- [p5.js](https://p5js.org)
+- ChatGPT helped a lot in explaining the code and improving my understanding of p5.js. I had all the ideas myself and tried to develop them based on what we learned in the course. But sometimes it was hard to achieve exactly what I imagined, so I used AI tool to help better express and implement my thoughts. Most of the time, I asked ChatGPT to tell me the full code and explain them step by step.
+[ChatGPT](https://chatgpt.com/share/6847ee6c-e658-800f-8483-6ed4ac311111)
+[ChatGPT](https://chatgpt.com/share/6847eee5-7f98-800f-b918-23e87253133e)
+[ChatGPT](https://chatgpt.com/share/6847ef20-93a0-800f-baa3-6d54d8a697e4)
+- [p5.js](https://p5js.org) p5.js helped me a lot in understanding how the code works and allowed me to realise how to use it in a simple and basic way.
