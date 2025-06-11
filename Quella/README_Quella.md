@@ -1,62 +1,86 @@
-# 🕊️ Perlin Noise & Randomness Animation – Individual Submission (Quella He)
-
-## 🎮 How to Interact with the Work
-Move your mouse across the canvas.  
-When the mouse approaches any brush stroke, the particles react and flow around the cursor.  
-When the mouse leaves, the strokes gradually return to their original positions using Perlin noise and vector interpolation.
-
----
-
-## 🔧 Individual Animation Details
-
-### 🎨 Technique Used
-I selected **Perlin noise and randomness** as the main drivers for this animation.  
-Each stroke moves based on time-evolving Perlin noise values, producing organic and fluid motion. Randomness is added to control:
-- slight color shifts
-- particle angles
-- transparency (alpha)
-- return speed
-
-### ✨ What Makes My Version Unique
-- Introduced **three layered brush strokes**, each with its own scale and motion radius.
-- Used **mouse distance** to trigger dynamic interaction – closer strokes are pulled into orbit by the mouse.
-- Created a **shimmering ink-painting feel** through frame-by-frame color jitter.
-- Combined **Perlin-based flow** with **random seed individuality** for rich visual texture.
+# Dove in the Dream – Meditation  
+**Perlin noise and randomness**  
+**Group D**  
+**Name** | **Unikey**  
+--- | ---  
+Quella He | xihe0819  
 
 ---
 
-## 🌱 Inspiration
-This work is inspired by traditional **Chinese ink painting**, where brush strokes suggest motion and energy.  
-I also drew from generative artworks by **Zach Lieberman**, whose use of Perlin noise fields deeply influenced the flow dynamics in my code.
+## How to Interact
+- Move your mouse across the canvas to interact with the dove’s body.
+- Brushstroke particles flow using Perlin noise and jitter with randomness.
+- Hover over parts of the dove and you’ll trigger a black-and-white “ink wash” mode.
+- The brush strokes dynamically react to mouse distance, returning to original positions after.
+- Watch how the subtle color and motion effects are driven by both `random()` and `noise()`.
 
 ---
 
-## 📘 Explanation of Key Decisions
-- **Perlin Noise** is used to generate consistent but evolving motion paths.
-- **Random offsets** avoid visual repetition and keep each stroke unique.
-- Used `lerp()` for smooth return transitions after interaction.
-- Each particle has a unique `seed` to prevent synchronized movement.
+##  My Individual Animation Approach
+
+This animation focuses on visualizing **Perlin noise** and **randomness** through a flow of particles sampled from an image of a dove.
+
+My personal goals were:
+- Use **Perlin noise** to create fluid, organic motion for each stroke.
+- Apply **random()** during initialization to assign unique traits like length, width, angle, alpha.
+- Add slight **RGB color jittering** for visual texture while keeping the form elegant.
+- Create a **hover-based ink interaction** that transforms color to monochrome and simulates a “scatter effect”.
 
 ---
 
-## 📚 References and Tools
-- Tools used: `p5.js`, native functions like `noise()`, `p5.Vector`, `lerp()`
-- No third-party libraries or AI-generated code were used.
-- The group code provided the base structure for parsing the image and rendering layered particles. I extended it by adding interaction logic and flow behavior.
+##  Animation Driver
+
+- **Main Driver:** `noise()` function for flow direction and angle updates  
+- **Secondary Driver:** `random()` for jitter, flicker, individual differences  
+- **Interaction Driver:** `mouse position` to trigger ink mode and flow reactions  
 
 ---
 
-## 🖼️ Group Artwork Reference
+##  Animated Properties
+
+| Property            | Behaviour                                                                 | Unique Compared to Group      |
+|---------------------|---------------------------------------------------------------------------|--------------------------------|
+| Brush motion        | Flows with Perlin noise; wiggles with random jitter                       | Fully Perlin-driven with jitter |
+| Color variation     | Subtle RGB noise, flickers slightly                                       | More restrained than others    |
+| Ink effect          | Black-white ink when mouse is nearby                                     | Only triggers on hover         |
+| Particle geometry   | Each stroke has random length, angle, transparency                        | Individually randomized         |
+| Return animation    | Strokes return smoothly with `lerp()` after interaction                   | Transition uses noise + lerp   |
+
+---
+
+## Inspiration
+
+### Inspired Works
+#### 1. “Halo Dot” Series by Nan Qi  
+![Nan Qi - Halo Dot](https://files.ocula.com/ri/f2/f26953c9-ff62-426a-86a1-246ffe1ba0a5/1600/536/3-coloured-halo-dots-by-nan-qi.webp)  
+**Artist**: Nan Qi (China)  
+**Source**: [Wikimedia Commons](https://en.wikipedia.org/wiki/Nan_Qi_%28artist%29)  
+Nan Qi is a contemporary Chinese artist known for his "halo dots", which resemble ink seals or digital pixels. He creates them by precisely controlling ink absorption on xuan paper. This visual rhythm and dot-based structure inspired the way I built motion layers from image pixels.
+
+#### 2.Simulated Ink Brush Pressure
+Simulates pressure-sensitive ink flow on canvas using random and noise distortions：https://openprocessing.org/sketch/984328
+This inspired how I control the “ink mode” brush shapes and opacity.
+
+For my version, I wanted to create a calm and poetic feeling, like a piece of traditional Chinese ink painting slowly coming alive. Instead of fast or dramatic animations, I focused on smooth flow, subtle motion, and layered textures.
+By combining the influences with our group’s dove shape and motion base, I tried to create something that felt meditative, slightly mysterious, and very “Chinese” in spirit.
+
+---
+
+## Group Artwork Reference
 Based on the image **"Dove of Peace" by Pablo Picasso** (not part of the official artwork list but used for code development).
 
+---
+
+##  Technical Explanation
+
+- **Perlin noise:** Used to calculate flow angle and smooth motion over time.
+- **Random values:** Control initial position offset, length, width, angle, color variation, and transparency.
+- **Mouse repulsion:** When near a stroke, it gets pulled away in a circular pattern and turns into ink mode.
+- **Lerp:** Once the mouse leaves, each stroke gently returns to its original place.
 
 ---
 
-## 🔧 Technical Overview
+##  Tools & External Techniques
 
-- `InkParticle` class governs each floating “ink drop”
-- `noise()` used to create smooth wandering behavior
-- `random()` used to vary opacity, size, initial location
-
-```js
-this.x += map(noise(this.noiseSeedX), 0, 1, -1, 1);
+- **ChatGPT**  I asked it for ideas, then rewrote or tested them myself. 
+- **p5.js** (https://p5js.org)
